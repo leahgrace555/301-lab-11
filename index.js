@@ -21,4 +21,9 @@ app.get('/hello', (request,response) => {
   response.render('pages/index.ejs');
 })
 
+//searches route
+app.get('/searches/new', (request,response) => {
+  response.render('pages/searches/new.ejs')
+})
+
 
