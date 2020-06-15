@@ -4,13 +4,13 @@
   "description": "book app",
   "main": "index.js",
   "scripts": {
-    "start": "start",
-    "test": "test"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/leahgrace555/301-lab-11.git"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/leahgrace555/301-lab-11#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
+    "ejs": "^3.1.3",
     "express": "^4.17.1",
     "superagent": "^5.2.2"
   }
