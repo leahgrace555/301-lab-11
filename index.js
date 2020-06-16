@@ -41,34 +41,31 @@ app.post('/searches',(request,response) => {
 
   superagent.get(url)
     .then(results => {
-      // console.log(results.body.items[0].volumeInfo.imageLinks);
 
       let books = results.body.items.map(val => {
         return new Book(val)
       });
 
-      // response.status(200).send(books);
-
       response.render('pages/searches/show.ejs', {searchResults: books});
     }).catch(err => error(err, response));
 });
 
-//book constrcution
+//book construction
 function Book(info) {
-  const placeholderImg = 'https://i.imgur.com/J5LVHEL.jpg';
   this.title = info.volumeInfo.title ? info.volumeInfo.title: 'not available';
   this.author = info.volumeInfo.authors;
+  this.description = info.volumeInfo.description;
+
+  let img = info.volumeInfo.imageLinks.smallThumbnail;
   let reg = /^https/;
 
-  if(reg.test(info.volumeInfo.imageLinks.smallThumbnail)) {
-    this.imageULR = info.volumeInfo.imageLinks.smallThumbnail
+  if(reg.test(img)) {
+    this.imageULR = img
   } else{
-    // let last = info.volumeInfo.imageLinks.smallThumbnail.splice
-
-    this.imageULR = placeholderImg;
+    let first = 'https';
+    let last = img.slice(4);
+    this.imageULR = first + last;
   }
-  
-  //TODO: Make images have 'https' prefix.
 }
 
 // 500 error message
@@ -77,5 +74,4 @@ const error = (err, res) => {
   res.status(500).send('There was an error on our part.');
 }
 
-// 'https://www.googleapis.com/books/v1/volumes?q=';
 
