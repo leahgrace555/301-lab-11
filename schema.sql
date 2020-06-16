@@ -7,5 +7,8 @@ CREATE TABLE books
   authors VARCHAR(255),
   description TEXT,
   image_url VARCHAR(255),
-  isbn VARCHAR(255)
+  isbn VARCHAR(255),
+  bookshelf VARCHAR(255)
 );
+
+--  psql -f schema.sql -d bookapp

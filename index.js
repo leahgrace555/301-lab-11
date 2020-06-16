@@ -3,10 +3,13 @@
 const express = require('express');
 const app = express();
 const superagent = require('superagent');
-require('ejs');
-app.set('view engine', 'ejs');
+const pg = require('pg');
+const client = new pg.Client(process.env.DATABASE_URL);
+client.on('error', err => console.log(err));
 
 require('dotenv').config();
+require('ejs');
+app.set('view engine', 'ejs');
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
@@ -20,7 +23,13 @@ app.use(express.static('./Public'));
 
 //home route:
 app.get('/', (request, response) => {
-  response.render('pages/index.ejs');
+  let sql = 'SELECT * FROM books;';
+  client.query(sql)
+  .then(sqlResults => {
+    let books = sqlResults.rows
+    console.log(books);
+    response.render('pages/index.ejs');
+  })
 })
 
 //searches route
@@ -41,6 +50,7 @@ app.post('/searches', (request, response) => {
     url += `+inauthor:${query}`;
   }
 
+  // grab data from api
   superagent.get(url)
     .then(results => {
 
