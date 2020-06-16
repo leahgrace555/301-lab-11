@@ -61,7 +61,7 @@ function Book(info) {
   this.author = info.volumeInfo.authors;
   this.description = info.volumeInfo.description
 
-  let img = info.volumeInfo.imageLinks.smallThumbnail;
+  let img = info.volumeInfo.imageLinks.thumbnail;
   let reg = /^https/;
 
   if (reg.test(img)) {
@@ -80,5 +80,3 @@ const error = (err, res) => {
 }
 
 // const placeholderImg = 'https://i.imgur.com/J5LVHEL.jpg';
-
-//TODO: change smallthumbail to regular thumbnail

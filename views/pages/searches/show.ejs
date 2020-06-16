@@ -3,6 +3,9 @@
 
 <head>
   <title>Book Collection</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+    integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+
   <link rel="stylesheet" href="../../styles/reset.css">
   <link rel="stylesheet" href="../../styles/base.css">
   <link rel="stylesheet" href="../../styles/layout.css">
@@ -11,16 +14,16 @@
 
 <body>
   <main>
-    <% searchResults.forEach( book => { %>
-    <div class="wrapper">
-      <img class="img" src="<%= book.imageULR %>" />
+    <div id="wrapper">
+      <% searchResults.forEach( book => { %>
       <div class="info">
+        <img class="img" src="<%= book.imageULR %>" />
         <h2><%= book.title %></h3>
           <h3><%= book.author %></h3>
           <p><%= book.description %></p>
       </div>
+      <% }) %>
     </div>
-    <% }) %>
   </main>
 </body>
 

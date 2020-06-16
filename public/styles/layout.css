@@ -4,7 +4,7 @@ body {
   text-align: center;
 }
 
-.wrapper {
+#wrapper {
   display: grid;
   grid-template-columns: 1fr;
   margin: auto;
@@ -13,23 +13,28 @@ body {
   border: 2px solid black;
 }
 
+.info {
+  border: 2px solid black;
+  line-height: 1.25em;
+  padding: 10px, 5px;
+}
+
 @media only screen and (min-width: 768px) {
 
   body {
     margin-top: 50px;
   }
 
-  .wrapper {
+  #wrapper {
     grid-template-columns: repeat(3, 1fr);
-    width: 30%;
-    display: inline-block;
+    max-width: 1200px;
   }
 
   .info {
-    display: inline-block;
-
+    grid-template-columns: 1fr 1fr;
   }
 
-
-
+  .img {
+    float: left;
+  }
 }
