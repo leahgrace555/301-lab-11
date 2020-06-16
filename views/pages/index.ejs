@@ -7,7 +7,21 @@
   <link href="/public/styles/base.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-  <h1> Hello World</h1>
-  
+  <header>
+    <h1> Book App</h1>
+  </header>
+
+  <main>
+    <section id='in-database'>
+      <% books.forEach(book => { %>
+        <div class="book"> 
+          <span><%= book.title %></span>
+          <span><%= book.authors %></span>
+          <span><%= book.description %></span>
+          <p>Books on Bookshelf: <%=bookCount %></p>
+        </div>
+      <% }); %>
+    </section>
+  </main>
 </body>
 </html>

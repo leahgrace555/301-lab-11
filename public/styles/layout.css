@@ -30,6 +30,7 @@ body {
     max-width: 1200px;
   }
 
+  /* TODO: make this flexbox */
   .info {
     grid-template-columns: 1fr 1fr;
   }
