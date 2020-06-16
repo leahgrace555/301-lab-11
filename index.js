@@ -18,8 +18,8 @@ app.use(express.urlencoded({
 }));
 app.use(express.static('./Public'));
 
-//test route:
-app.get('/hello', (request, response) => {
+//home route:
+app.get('/', (request, response) => {
   response.render('pages/index.ejs');
 })
 
