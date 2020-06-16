@@ -11,4 +11,3 @@ CREATE TABLE books
   bookshelf VARCHAR(255)
 );
 
---  psql -f schema.sql -d bookapp

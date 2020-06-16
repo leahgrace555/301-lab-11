@@ -4,17 +4,13 @@ const express = require('express');
 const app = express();
 const superagent = require('superagent');
 const pg = require('pg');
+require('dotenv').config();
 const client = new pg.Client(process.env.DATABASE_URL);
 client.on('error', err => console.log(err));
 
-require('dotenv').config();
 require('ejs');
 app.set('view engine', 'ejs');
 const PORT = process.env.PORT || 3001;
-
-app.listen(PORT, () => {
-  console.log(`listening on ${PORT}`);
-});
 
 app.use(express.urlencoded({
   extended: true
@@ -25,12 +21,13 @@ app.use(express.static('./Public'));
 app.get('/', (request, response) => {
   let sql = 'SELECT * FROM books;';
   client.query(sql)
-  .then(sqlResults => {
-    let books = sqlResults.rows
-    console.log(books);
-    response.render('pages/index.ejs');
-  })
-})
+    .then(sqlResults => {
+      let books = sqlResults.rows
+      let totalBooks = sqlResults.rowCount;
+      console.log(books);
+      response.render('pages/index.ejs',{books: books, bookCount: totalBooks});
+    }).catch(err => error(err, response));
+});
 
 //searches route
 app.get('/searches/new', (request, response) => {
@@ -61,7 +58,6 @@ app.post('/searches', (request, response) => {
       response.render('pages/searches/show.ejs', {
         searchResults: books
       });
-      // }).catch(response.render('pages/error.ejs'));
     }).catch(err => error(err, response));
 });
 
@@ -89,4 +85,14 @@ const error = (err, res) => {
   res.status(500).send('There was an error on our part.');
 }
 
+// app.listen(PORT, () => {
+//   console.log(`listening on ${PORT}`);
+// });
+
+client.connect()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`listening on ${PORT}.`);
+    });
+  });
 // const placeholderImg = 'https://i.imgur.com/J5LVHEL.jpg';
