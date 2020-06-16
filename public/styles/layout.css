@@ -1,0 +1,40 @@
+body {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+}
+
+#wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin: auto;
+  padding: 5px;
+  width: 100%;
+  border: 2px solid black;
+}
+
+.info {
+  border: 2px solid black;
+  line-height: 1.25em;
+  padding: 10px, 5px;
+}
+
+@media only screen and (min-width: 768px) {
+
+  body {
+    margin-top: 50px;
+  }
+
+  #wrapper {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 1200px;
+  }
+
+  .info {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .img {
+    float: left;
+  }
+}
