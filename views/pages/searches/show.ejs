@@ -12,11 +12,15 @@
 <body>
   <main>
     <% searchResults.forEach( book => { %>
-    <img src="<%= book.imageULR %>" />
-    <h2><%= book.title %></h3>
-      <h3><%= book.author %></h3>
-      <p><%= book.description %></p>
-      <% }) %>
+    <div class="wrapper">
+      <img class="img" src="<%= book.imageULR %>" />
+      <div class="info">
+        <h2><%= book.title %></h3>
+          <h3><%= book.author %></h3>
+          <p><%= book.description %></p>
+      </div>
+    </div>
+    <% }) %>
   </main>
 </body>
 
