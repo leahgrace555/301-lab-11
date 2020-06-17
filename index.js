@@ -52,20 +52,42 @@ app.post('/searches', (request, response) => {
     .then(results => {
 
       let books = results.body.items.map(val => {
-        return new Book(val)
+        return new Book(val);
       });
-
+      console.log(results.body.items[0]);
       response.render('pages/searches/show.ejs', {
         searchResults: books
       });
     }).catch(err => error(err, response));
 });
 
+app.get('/books/:book_id', getSingleBook);
+//need hiden form
+//need anchor tag on ejs file with "show details" that has an href of this route
+// funciton to retreive 
+function getSingleBook(request, response) {
+  console.log('request params id:', request.params.book_id);
+
+  let id = request.params.book_id;
+  let sql = 'SELECT * FROM books WHERE id=$1;';
+  let safeVals = [id];
+
+  client.query(sql, safeVals)
+    .then(sqlResults => {
+  
+      // console.log(sqlResults.rows);
+      response.status(200).render('pages/searches/detail.ejs', {
+        oneBook: sqlResults.rows[0]
+      });
+    }).catch(err => error(err, response));
+}
+
 //book construction
 function Book(info) {
   this.title = info.volumeInfo.title ? info.volumeInfo.title : 'not available';
   this.author = info.volumeInfo.authors;
-  this.description = info.volumeInfo.description
+  this.description = info.volumeInfo.description;
+  this.isbn = info.volumneInfo.industryIdentifiers[0].identifier;
 
   let img = info.volumeInfo.imageLinks.thumbnail;
   let reg = /^https/;
@@ -95,4 +117,6 @@ client.connect()
       console.log(`listening on ${PORT}.`);
     });
   });
+
 // const placeholderImg = 'https://i.imgur.com/J5LVHEL.jpg';
+// TODO: refactor routes into callback functions
