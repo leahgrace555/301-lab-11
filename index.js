@@ -61,7 +61,13 @@ const error = (err, res) => {
 // adds a book to the favorites list
 function addBook(request, response) {
 
-  let {title, authors, description, image_url, isbn} = request.body;
+  let {
+    title,
+    authors,
+    description,
+    image_url,
+    isbn
+  } = request.body;
   // console.log(request.body.items);
   let sql = 'INSERT INTO books (title, authors, description, image_url, isbn) VALUES ($1, $2, $3, $4, $5) RETURNING ID;';
   let safeVals = [title, authors, description, image_url, isbn];
@@ -88,7 +94,10 @@ function getFavorites(request, response) {
       let books = sqlResults.rows
       let totalBooks = sqlResults.rowCount;
       // console.log(books);
-      response.render('pages/index.ejs',{books: books, bookCount: totalBooks});
+      response.render('pages/index.ejs', {
+        books: books,
+        bookCount: totalBooks
+      });
     }).catch(err => error(err, response));
 }
 
@@ -141,6 +150,8 @@ function getSingleBook(request, response) {
     }).catch(err => error(err, response));
 }
 
+////////////////////////////////////////LISTENERS///////////////////////////////////
+
 client.connect()
   .then(() => {
     app.listen(PORT, () => {
@@ -149,4 +160,3 @@ client.connect()
   });
 
 // const placeholderImg = 'https://i.imgur.com/J5LVHEL.jpg';
-
