@@ -75,10 +75,7 @@ const error = (err, res) => {
 
 // TODO:
 function updateBook(request, response) {
-  // collect info that needs to be updates
-  // update the DB with the new info
-  // redirect to the detail page with new values
-  // console.log('form info to be updated:', request.body);
+
   let id = request.params.book_id;
 
   let {
@@ -97,13 +94,23 @@ function updateBook(request, response) {
       // redirect to the detail page with new values
       response.redirect(`/books/${id}`);
     }).catch(err => error(err, response));
-
 }
 
 // function for delete route
 // removes a book from favorites
 function deleteBook(request, response) {
 
+  let id = request.params.book_id;
+
+  let sql = 'DELETE FROM books WHERE id=$1;';
+  let safeVals = [id];
+
+  client.query(sql, safeVals)
+    .then(sqlResults => {
+
+      response.redirect(`/`);
+
+    }).catch(err => error(err, response));
 }
 
 // call back function for addbook route
