@@ -2,6 +2,7 @@
 
 ////////////////////////////////INITIALIZE SERVER////////////////////////////////////////
 
+// bring in libraries
 const express = require('express');
 const app = express();
 const superagent = require('superagent');
@@ -9,6 +10,7 @@ const pg = require('pg');
 const methodOverride = require('method-override');
 require('dotenv').config();
 require('ejs');
+
 const client = new pg.Client(process.env.DATABASE_URL);
 client.on('error', err => console.log(err));
 
@@ -68,10 +70,31 @@ const error = (err, res) => {
 // }
 /////////////////////////////////CALLBACK FUNCTIONS////////////////////////////////////////////
 
+// TODO:
 function updateBook(request, response) {
   // collect info that needs to be updates
   // update the DB with the new info
   // redirect to the detail page with new values
+  console.log('form info to be updated:', request.body);
+  let id = request.params.book_id;
+  // console.log(id);
+
+  let {
+    title,
+    authors,
+    description
+  } = request.body;
+
+  let sql = 'UPDATE books SET title=$1, authors=$2, description=$3 WHERE id=$4;';
+
+  let safeVals = [title, authors, description, id];
+
+  client.query(sql, safeVals)
+    .then(sqlResults => {
+      // redirect to the detail page with new values
+      response.redirect(`/books/${id}`);
+    }).catch(err => error(err, response));
+
 }
 
 // call back function for addbook route
