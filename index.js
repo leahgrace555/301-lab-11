@@ -35,6 +35,7 @@ function Book(info) {
   this.author = info.volumeInfo.authors;
   this.description = info.volumeInfo.description;
   this.isbn = info.volumeInfo.industryIdentifiers[0].identifier;
+  this.bookshelf = info.volumeInfo.categories;
 
   let img = info.volumeInfo.imageLinks.thumbnail;
   let reg = /^https/;
@@ -76,22 +77,23 @@ function updateBook(request, response) {
   // collect info that needs to be updates
   // update the DB with the new info
   // redirect to the detail page with new values
-  console.log('form info to be updated:', request.body);
+  // console.log('form info to be updated:', request.body);
   let id = request.params.book_id;
-  // console.log(id);
 
   let {
     title,
     authors,
-    description
+    description,
+    bookshelf
   } = request.body;
 
-  let sql = 'UPDATE books SET title=$1, authors=$2, description=$3 WHERE id=$4;';
+  let sql = 'UPDATE books SET title=$1, authors=$2, description=$3, bookshelf=$4 WHERE id=$5;';
 
-  let safeVals = [title, authors, description, id];
+  let safeVals = [title, authors, description, bookshelf, id];
 
   client.query(sql, safeVals)
     .then(sqlResults => {
+      console.log(sqlResults);
       // redirect to the detail page with new values
       response.redirect(`/books/${id}`);
     }).catch(err => error(err, response));
@@ -107,11 +109,14 @@ function addBook(request, response) {
     authors,
     description,
     image_url,
-    isbn
+    isbn,
+    bookshelf
   } = request.body;
 
-  let sql = 'INSERT INTO books (title, authors, description, image_url, isbn) VALUES ($1, $2, $3, $4, $5) RETURNING ID;';
-  let safeVals = [title, authors, description, image_url, isbn];
+  console.log(request.body);
+
+  let sql = 'INSERT INTO books (title, authors, description, image_url, isbn, bookshelf) VALUES ($1, $2, $3, $4, $5, $6) RETURNING ID;';
+  let safeVals = [title, authors, description, image_url, isbn, bookshelf];
 
   // push data into sql
   client.query(sql, safeVals)
@@ -153,6 +158,7 @@ function postSearchResults(request, response) {
   // get api url
   let url = 'https://www.googleapis.com/books/v1/volumes?q='
 
+
   let query = request.body.search[0];
   let titleOrAuthor = request.body.search[1];
 
@@ -165,7 +171,7 @@ function postSearchResults(request, response) {
   // grab data from api
   superagent.get(url)
     .then(results => {
-
+      console.log(results.body.items[0].volumeInfo.categories)
       // loop through results and construct new book object each iteration
       let books = results.body.items.map(val => {
         return new Book(val);
