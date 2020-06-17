@@ -1,21 +1,31 @@
 'use strict';
 
+////////////////////////////////INITIALIZE SERVER////////////////////////////////////////
+
+// bring in libraries
 const express = require('express');
 const app = express();
 const superagent = require('superagent');
 const pg = require('pg');
+const methodOverride = require('method-override');
 require('dotenv').config();
+require('ejs');
+
 const client = new pg.Client(process.env.DATABASE_URL);
 client.on('error', err => console.log(err));
 
-require('ejs');
 app.set('view engine', 'ejs');
 const PORT = process.env.PORT || 3001;
 
+// middleware
 app.use(express.urlencoded({
   extended: true
 }));
 app.use(express.static('./Public'));
+
+// gives the ability to translate html post to put
+app.use(methodOverride('_method'));
+
 
 /////////////////////////////////CONSTRUCTORS////////////////////////////////////////////
 
@@ -40,12 +50,12 @@ function Book(info) {
 
 /////////////////////////////////ROUTES//////////////////////////////////////////////////////
 
-// routes
 app.get('/books/:book_id', getSingleBook);
 app.get('/searches', getSearch);
 app.get('/', getFavorites);
 app.post('/searches', postSearchResults);
 app.post('/', addBook);
+app.put('/update/:book_id', updateBook);
 
 /////////////////////////////////HELPER FUNCTIONS////////////////////////////////////////////
 
@@ -54,22 +64,60 @@ const error = (err, res) => {
   console.log('Error', err);
   res.status(500).send('There was an error on our part.');
 }
-
+// function for unknown routes
+// function route404(request, response) {
+//   response.redirect('pages/searches/error.ejs');
+// }
 /////////////////////////////////CALLBACK FUNCTIONS////////////////////////////////////////////
+
+// TODO:
+function updateBook(request, response) {
+  // collect info that needs to be updates
+  // update the DB with the new info
+  // redirect to the detail page with new values
+  console.log('form info to be updated:', request.body);
+  let id = request.params.book_id;
+  // console.log(id);
+
+  let {
+    title,
+    authors,
+    description
+  } = request.body;
+
+  let sql = 'UPDATE books SET title=$1, authors=$2, description=$3 WHERE id=$4;';
+
+  let safeVals = [title, authors, description, id];
+
+  client.query(sql, safeVals)
+    .then(sqlResults => {
+      // redirect to the detail page with new values
+      response.redirect(`/books/${id}`);
+    }).catch(err => error(err, response));
+
+}
 
 // call back function for addbook route
 // adds a book to the favorites list
 function addBook(request, response) {
 
-  let {title, authors, description, image_url, isbn} = request.body;
-  // console.log(request.body.items);
+  let {
+    title,
+    authors,
+    description,
+    image_url,
+    isbn
+  } = request.body;
+
   let sql = 'INSERT INTO books (title, authors, description, image_url, isbn) VALUES ($1, $2, $3, $4, $5) RETURNING ID;';
   let safeVals = [title, authors, description, image_url, isbn];
 
+  // push data into sql
   client.query(sql, safeVals)
     .then(sqlResults => {
       let id = sqlResults.rows[0].id;
-      console.log(id);
+
+      // redirect page to detail.ejs
       response.redirect(`/books/${id}`);
     }).catch(err => error(err, response));
 }
@@ -83,12 +131,19 @@ function getSearch(request, response) {
 // displays the favorited books on the home page
 function getFavorites(request, response) {
   let sql = 'SELECT * FROM books;';
+
+  // return sql data
   client.query(sql)
     .then(sqlResults => {
+      // get book data and book count
       let books = sqlResults.rows
       let totalBooks = sqlResults.rowCount;
-      // console.log(books);
-      response.render('pages/index.ejs',{books: books, bookCount: totalBooks});
+
+      // render to home page
+      response.render('pages/index.ejs', {
+        books: books,
+        bookCount: totalBooks
+      });
     }).catch(err => error(err, response));
 }
 
@@ -131,6 +186,7 @@ function getSingleBook(request, response) {
   let sql = 'SELECT * FROM books WHERE id=$1;';
   let safeVals = [id];
 
+  // return sql data
   client.query(sql, safeVals)
     .then(sqlResults => {
 
@@ -141,6 +197,8 @@ function getSingleBook(request, response) {
     }).catch(err => error(err, response));
 }
 
+////////////////////////////////////////LISTENERS///////////////////////////////////
+
 client.connect()
   .then(() => {
     app.listen(PORT, () => {
@@ -150,3 +208,5 @@ client.connect()
 
 // const placeholderImg = 'https://i.imgur.com/J5LVHEL.jpg';
 
+// TODO: fix issue with adding duplicate books to bookshelf
+// TODO: add catch all for unknown routes

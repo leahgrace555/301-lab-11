@@ -15,10 +15,17 @@
     <img src="<%= oneBook.image_url %>" alt="<%= oneBook.title %>">
   </section>
 
+  <form action="/update/<%= oneBook.id %> ?_method=PUT" method="post">
+    <input type="text" name="title" value="<%= oneBook.title %>" placeholder="Book Title">
+    <input type="text" name="author" value="<%= oneBook.authors %>" placeholder="author">
+    <input type="text" name="description" value="<%= oneBook.description %>" placeholder="description">
+    <button>Submit</button>
+  </form>
+
   <footer>
     <a href="/">Go to favorites</a>
     <a href="/searches">Search an author / book</a>
-    <a type="button" href="#" onclick="history.back()">Back to gallery</a>
+    <a type="button" href="#" onclick="history.back()">Go Back</a>
   </footer>
 </body>
 
