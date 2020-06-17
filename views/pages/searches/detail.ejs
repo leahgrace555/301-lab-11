@@ -7,19 +7,12 @@
 
 <body>
 
-  <section>
-    <p><%= oneBook.title %></p>
-    <p><%= oneBook.authors %></p>
-    <p><%= oneBook.description %></p>
-    <p><%= oneBook.isbn %></p>
-    <p><%= oneBook.bookshelf %></p>
-    <img src="<%= oneBook.image_url %>" alt="<%= oneBook.title %>">
-  </section>
+  <%- include('../../layout/book.ejs') %>
 
   <button id="show">Update Details</button>
 
   <div id="details-form">
-    <%- include('../books/edit.ejs') %>
+    <%- include('../../layout/form.ejs') %>
   </div>
 
   <footer>

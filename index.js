@@ -93,7 +93,6 @@ function updateBook(request, response) {
 
   client.query(sql, safeVals)
     .then(sqlResults => {
-      console.log(sqlResults);
       // redirect to the detail page with new values
       response.redirect(`/books/${id}`);
     }).catch(err => error(err, response));
@@ -112,8 +111,6 @@ function addBook(request, response) {
     isbn,
     bookshelf
   } = request.body;
-
-  console.log(request.body);
 
   let sql = 'INSERT INTO books (title, authors, description, image_url, isbn, bookshelf) VALUES ($1, $2, $3, $4, $5, $6) RETURNING ID;';
   let safeVals = [title, authors, description, image_url, isbn, bookshelf];
@@ -171,7 +168,6 @@ function postSearchResults(request, response) {
   // grab data from api
   superagent.get(url)
     .then(results => {
-      console.log(results.body.items[0].volumeInfo.categories)
       // loop through results and construct new book object each iteration
       let books = results.body.items.map(val => {
         return new Book(val);
@@ -199,7 +195,7 @@ function getSingleBook(request, response) {
 
       // render sql data to detail.ejs
       response.status(200).render('pages/searches/detail.ejs', {
-        oneBook: sqlResults.rows[0]
+        book: sqlResults.rows[0]
       });
     }).catch(err => error(err, response));
 }
