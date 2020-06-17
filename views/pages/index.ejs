@@ -1,32 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link href="/public/styles/base.css" rel="stylesheet" type="text/css">
 </head>
+
 <body>
   <header>
     <h1> Book App</h1>
+    <a href="/searches">Search an author / book</a>
   </header>
 
   <main>
     <section id='in-database'>
+      <p>Books on Bookshelf: <%=bookCount %></p>
       <% books.forEach(book => { %>
-        <div class="book"> 
-          <span><%= book.title %></span>
-          <span><%= book.authors %></span>
-          <span><%= book.description %></span>
-          <p>Books on Bookshelf: <%=bookCount %></p>
-          <a href="/books/<%= book.id %>">Show Details</a>
-        </div>
-        <input type="hidden" name="title" value=<%= book.title %>>
-        <input type="hidden" name="authors" value=<%= book.authors %>>
-        <input type="hidden" name="description" value=<%= book.description %>>
-        <button>add to favorites list</button>
+      <div class="book">
+        <p><%= book.title %></p>
+        <p><%= book.authors %></p>
+        <img src="<%= book.image_url %>" alt="book.title">
+        <a href="/books/<%= book.id %>">Show Details</a>
+      </div>
+      <input type="hidden" name="title" value=<%= book.title %>>
+      <input type="hidden" name="authors" value=<%= book.authors %>>
       <% }); %>
     </section>
   </main>
 </body>
+
 </html>

@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <%- include('../../layout/head.ejs') %>
 </head>
+
 <body>
+
   <section>
-    <span><%= oneBook.title %></span>
-    <span><%= oneBook.authors %></span>
-    <span><%= oneBook.description %></span>
-    <span><%= oneBook.isbn %></span>
-    <span><%= oneBook.image_url %></span>
+    <p><%= oneBook.title %></p>
+    <p><%= oneBook.authors %></p>
+    <p><%= oneBook.description %></p>
+    <p><%= oneBook.isbn %></p>
+    <img src="<%= oneBook.image_url %>" alt="<%= oneBook.title %>">
   </section>
-  
+
+  <footer>
+    <a href="/">Go to favorites</a>
+    <a href="/searches">Search an author / book</a>
+    <a type="button" href="#" onclick="history.back()">Back to gallery</a>
+  </footer>
 </body>
+
 </html>
