@@ -38,7 +38,7 @@ function Book(info) {
   }
 }
 
-/////////////////////////////////ROUTES////////////////////////////////////////////
+/////////////////////////////////ROUTES//////////////////////////////////////////////////////
 
 // routes
 app.get('/books/:book_id', getSingleBook);
@@ -107,13 +107,15 @@ function getSingleBook(request, response) {
   console.log('request params id:', request.params.book_id);
 
   let id = request.params.book_id;
+
+  // get sql data
   let sql = 'SELECT * FROM books WHERE id=$1;';
   let safeVals = [id];
 
   client.query(sql, safeVals)
     .then(sqlResults => {
 
-      // console.log(sqlResults.rows);
+      // render sql data to detail.ejs
       response.status(200).render('pages/searches/detail.ejs', {
         oneBook: sqlResults.rows[0]
       });
