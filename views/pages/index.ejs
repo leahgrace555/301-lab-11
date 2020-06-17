@@ -11,21 +11,21 @@
 <body>
   <header>
     <h1> Book App</h1>
+    <a href="/searches">Search an author / book</a>
   </header>
 
   <main>
     <section id='in-database'>
+      <p>Books on Bookshelf: <%=bookCount %></p>
       <% books.forEach(book => { %>
       <div class="book">
-        <span><%= book.title %></span>
-        <span><%= book.authors %></span>
-        <span><%= book.description %></span>
-        <p>Books on Bookshelf: <%=bookCount %></p>
+        <p><%= book.title %></p>
+        <p><%= book.authors %></p>
+        <img src="<%= book.image_url %>" alt="book.title">
         <a href="/books/<%= book.id %>">Show Details</a>
       </div>
       <input type="hidden" name="title" value=<%= book.title %>>
       <input type="hidden" name="authors" value=<%= book.authors %>>
-      <input type="hidden" name="description" value=<%= book.description %>>
       <% }); %>
     </section>
   </main>
