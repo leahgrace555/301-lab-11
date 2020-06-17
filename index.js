@@ -54,6 +54,7 @@ function Book(info) {
 app.get('/books/:book_id', getSingleBook);
 app.get('/searches', getSearch);
 app.get('/', getFavorites);
+app.get('/delete/:book_id', deleteBook);
 app.post('/searches', postSearchResults);
 app.post('/', addBook);
 app.put('/update/:book_id', updateBook);
@@ -96,6 +97,12 @@ function updateBook(request, response) {
       // redirect to the detail page with new values
       response.redirect(`/books/${id}`);
     }).catch(err => error(err, response));
+
+}
+
+// function for delete route
+// removes a book from favorites
+function deleteBook(request, response) {
 
 }
 
