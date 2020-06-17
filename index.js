@@ -1,9 +1,12 @@
 'use strict';
 
+////////////////////////////////INITIALIZE SERVER////////////////////////////////////////
+
 const express = require('express');
 const app = express();
 const superagent = require('superagent');
 const pg = require('pg');
+const methodOverride = require('method-override');
 require('dotenv').config();
 require('ejs');
 const client = new pg.Client(process.env.DATABASE_URL);
@@ -12,10 +15,15 @@ client.on('error', err => console.log(err));
 app.set('view engine', 'ejs');
 const PORT = process.env.PORT || 3001;
 
+// middleware
 app.use(express.urlencoded({
   extended: true
 }));
 app.use(express.static('./Public'));
+
+// gives the ability to translate html post to put
+app.use(methodOverride('_method'));
+
 
 /////////////////////////////////CONSTRUCTORS////////////////////////////////////////////
 
@@ -40,12 +48,12 @@ function Book(info) {
 
 /////////////////////////////////ROUTES//////////////////////////////////////////////////////
 
-// routes
 app.get('/books/:book_id', getSingleBook);
 app.get('/searches', getSearch);
 app.get('/', getFavorites);
 app.post('/searches', postSearchResults);
 app.post('/', addBook);
+app.put('/update/:book_id', updateBook);
 
 /////////////////////////////////HELPER FUNCTIONS////////////////////////////////////////////
 
@@ -54,8 +62,17 @@ const error = (err, res) => {
   console.log('Error', err);
   res.status(500).send('There was an error on our part.');
 }
-
+// function for unknown routes
+// function route404(request, response) {
+//   response.redirect('pages/searches/error.ejs');
+// }
 /////////////////////////////////CALLBACK FUNCTIONS////////////////////////////////////////////
+
+function updateBook(request, response) {
+  // collect info that needs to be updates
+  // update the DB with the new info
+  // redirect to the detail page with new values
+}
 
 // call back function for addbook route
 // adds a book to the favorites list
@@ -68,7 +85,7 @@ function addBook(request, response) {
     image_url,
     isbn
   } = request.body;
-  // console.log(request.body.items);
+
   let sql = 'INSERT INTO books (title, authors, description, image_url, isbn) VALUES ($1, $2, $3, $4, $5) RETURNING ID;';
   let safeVals = [title, authors, description, image_url, isbn];
 
