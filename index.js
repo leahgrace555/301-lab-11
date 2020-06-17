@@ -72,10 +72,12 @@ function addBook(request, response) {
   let sql = 'INSERT INTO books (title, authors, description, image_url, isbn) VALUES ($1, $2, $3, $4, $5) RETURNING ID;';
   let safeVals = [title, authors, description, image_url, isbn];
 
+  // push data into sql
   client.query(sql, safeVals)
     .then(sqlResults => {
       let id = sqlResults.rows[0].id;
-      console.log(id);
+
+      // redirect page to detail.ejs
       response.redirect(`/books/${id}`);
     }).catch(err => error(err, response));
 }
@@ -89,6 +91,8 @@ function getSearch(request, response) {
 // displays the favorited books on the home page
 function getFavorites(request, response) {
   let sql = 'SELECT * FROM books;';
+
+  // return sql data
   client.query(sql)
     .then(sqlResults => {
       // get book data and book count
@@ -142,6 +146,7 @@ function getSingleBook(request, response) {
   let sql = 'SELECT * FROM books WHERE id=$1;';
   let safeVals = [id];
 
+  // return sql data
   client.query(sql, safeVals)
     .then(sqlResults => {
 
