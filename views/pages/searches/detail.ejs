@@ -15,6 +15,12 @@
     <img src="<%= oneBook.image_url %>" alt="<%= oneBook.title %>">
   </section>
 
+  <form action="/update/<%= oneBook.id %>" method="post">
+    <input type="text" name="title" value="<%= oneBook.title %>" placeholder="Book Title">
+    <input type="text" name="author" value="<%= oneBook.authors %>" placeholder="author">
+    <input type="text" name="description" value="<%= oneBook.description %>" placeholder="description">
+  </form>
+
   <footer>
     <a href="/">Go to favorites</a>
     <a href="/searches">Search an author / book</a>
