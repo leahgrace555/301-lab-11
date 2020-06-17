@@ -5,10 +5,10 @@ const app = express();
 const superagent = require('superagent');
 const pg = require('pg');
 require('dotenv').config();
+require('ejs');
 const client = new pg.Client(process.env.DATABASE_URL);
 client.on('error', err => console.log(err));
 
-require('ejs');
 app.set('view engine', 'ejs');
 const PORT = process.env.PORT || 3001;
 
@@ -91,9 +91,11 @@ function getFavorites(request, response) {
   let sql = 'SELECT * FROM books;';
   client.query(sql)
     .then(sqlResults => {
+      // get book data and book count
       let books = sqlResults.rows
       let totalBooks = sqlResults.rowCount;
-      // console.log(books);
+
+      // render to home page
       response.render('pages/index.ejs', {
         books: books,
         bookCount: totalBooks
@@ -160,3 +162,7 @@ client.connect()
   });
 
 // const placeholderImg = 'https://i.imgur.com/J5LVHEL.jpg';
+
+// TODO: fix issue with adding duplicate books to bookshelf
+// TODO: fix the back button display value to simply 'back'
+// TODO: 
