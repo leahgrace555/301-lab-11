@@ -76,6 +76,7 @@ function getFavorites(request, response) {
 
 // call back function for search results route
 function postSearchResults(request, response) {
+  // get api url
   let url = 'https://www.googleapis.com/books/v1/volumes?q='
 
   let query = request.body.search[0];
@@ -130,4 +131,4 @@ client.connect()
   });
 
 // const placeholderImg = 'https://i.imgur.com/J5LVHEL.jpg';
-// TODO: refactor routes into callback functions
+
