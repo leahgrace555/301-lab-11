@@ -68,6 +68,7 @@ const error = (err, res) => {
 // function route404(request, response) {
 //   response.redirect('pages/searches/error.ejs');
 // }
+
 /////////////////////////////////CALLBACK FUNCTIONS////////////////////////////////////////////
 
 // TODO:

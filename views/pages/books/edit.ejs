@@ -1,0 +1,6 @@
+<form action="/update/<%= oneBook.id %> ?_method=PUT" method="post">
+  <input type="text" name="title" value="<%= oneBook.title %>" placeholder="Book Title">
+  <input type="text" name="author" value="<%= oneBook.authors %>" placeholder="author">
+  <input type="text" name="description" value="<%= oneBook.description %>" placeholder="description">
+  <button id="hide">Submit</button>
+</form>

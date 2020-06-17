@@ -15,18 +15,29 @@
     <img src="<%= oneBook.image_url %>" alt="<%= oneBook.title %>">
   </section>
 
-  <form action="/update/<%= oneBook.id %> ?_method=PUT" method="post">
-    <input type="text" name="title" value="<%= oneBook.title %>" placeholder="Book Title">
-    <input type="text" name="author" value="<%= oneBook.authors %>" placeholder="author">
-    <input type="text" name="description" value="<%= oneBook.description %>" placeholder="description">
-    <button>Submit</button>
-  </form>
+  <button id="show">Update Details</button>
+
+  <div id="details-form">
+    <%- include('../books/edit.ejs') %>
+  </div>
 
   <footer>
     <a href="/">Go to favorites</a>
     <a href="/searches">Search an author / book</a>
     <a type="button" href="#" onclick="history.back()">Go Back</a>
   </footer>
+
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script>
+    $('#details-form').hide();
+    $('#show').on('click', () => {
+      $('#details-form').show();
+    });
+
+    $('#hide').on('click', () => {
+      $('#details-form').hide();
+    });
+  </script>
 </body>
 
 </html>
