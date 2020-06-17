@@ -169,5 +169,4 @@ client.connect()
 // const placeholderImg = 'https://i.imgur.com/J5LVHEL.jpg';
 
 // TODO: fix issue with adding duplicate books to bookshelf
-// TODO: fix the back button display value to simply 'back'
-// TODO: 
+// TODO: add catch all for unknown routes
