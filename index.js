@@ -30,11 +30,11 @@ function Book(info) {
   let reg = /^https/;
 
   if (reg.test(img)) {
-    this.imageULR = img
+    this.image_url = img
   } else {
     let first = 'https';
     let last = img.slice(4);
-    this.imageULR = first + last;
+    this.image_url = first + last;
   }
 }
 
@@ -42,9 +42,10 @@ function Book(info) {
 
 // routes
 app.get('/books/:book_id', getSingleBook);
-app.get('/searches/new', getSearch);
+app.get('/searches', getSearch);
 app.get('/', getFavorites);
 app.post('/searches', postSearchResults);
+app.post('/', addBook);
 
 /////////////////////////////////HELPER FUNCTIONS////////////////////////////////////////////
 
@@ -55,6 +56,23 @@ const error = (err, res) => {
 }
 
 /////////////////////////////////CALLBACK FUNCTIONS////////////////////////////////////////////
+
+// call back function for addbook route
+// adds a book to the favorites list
+function addBook(request, response) {
+
+  let {title, authors, description, image_url, isbn} = request.body;
+  // console.log(request.body.items);
+  let sql = 'INSERT INTO books (title, authors, description, image_url, isbn) VALUES ($1, $2, $3, $4, $5) RETURNING ID;';
+  let safeVals = [title, authors, description, image_url, isbn];
+
+  client.query(sql, safeVals)
+    .then(sqlResults => {
+      let id = sqlResults.rows[0].id;
+      console.log(id);
+      response.redirect(`/books/${id}`);
+    }).catch(err => error(err, response));
+}
 
 // call back function for searches/new route
 function getSearch(request, response) {
@@ -69,7 +87,7 @@ function getFavorites(request, response) {
     .then(sqlResults => {
       let books = sqlResults.rows
       let totalBooks = sqlResults.rowCount;
-      console.log(books);
+      // console.log(books);
       response.render('pages/index.ejs',{books: books, bookCount: totalBooks});
     }).catch(err => error(err, response));
 }
@@ -96,7 +114,7 @@ function postSearchResults(request, response) {
       let books = results.body.items.map(val => {
         return new Book(val);
       });
-      console.log(results.body.items[0]);
+      // console.log(results.body.items[0]);
       response.render('pages/searches/show.ejs', {
         searchResults: books
       });
@@ -105,7 +123,7 @@ function postSearchResults(request, response) {
 
 // call back function for books route
 function getSingleBook(request, response) {
-  console.log('request params id:', request.params.book_id);
+  // console.log('request params id:', request.params.book_id);
 
   let id = request.params.book_id;
 

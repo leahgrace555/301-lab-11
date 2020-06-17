@@ -14,17 +14,22 @@
   <main>
     <div id="wrapper">
       <% searchResults.forEach( book => { %>
-      <div class="info">
-        <img class="img" src="<%= book.imageULR %>" />
-        <h2><%= book.title %></h3>
-          <h3><%= book.author %></h3>
-          <p><%= book.description %></p>
-      </div>
+      <form action="/" method="post">
+        <div class="info">
+          <img class="img" src="<%= book.image_url %>" />
+          <h2><%= book.title %></h3>
+            <h3><%= book.author %></h3>
+            <p><%= book.description %></p>
+            <input type="hidden" name="title" value="<%= book.title %>">
+            <input type="hidden" name="image_url" value="<%= book.image_url %>">
+            <input type="hidden" name="authors" value="<%= book.author %>">
+            <input type="hidden" name="description" value="<%= book.description %>">
+            <button>Add to favorites list</button>
+        </div>
+      </form>
       <% }) %>
     </div>
   </main>
 </body>
 
 </html>
-
-<!-- in this page, need the hidden form with an action to get the ID -->
