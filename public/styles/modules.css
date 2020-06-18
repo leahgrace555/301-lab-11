@@ -1,3 +1,48 @@
+header {
+  height: 3em;
+  background-image: url('img/photo-1481627834876-b7833e8f5570.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-size: 50pt;
+  text-shadow: 0 0 3px #FFffff, 0 0 5px #0000FF;
+  /* -webkit-text-stroke: 1px antiquewhite; */
+}
+
+header h1 {
+  line-height: 3em;
+}
+
 .img {
   border: 2px solid black;
+}
+
+.book {
+  border: 5px solid #FBFD8A;
+  background-color: #87DFD6;
+  width: 50%;
+  margin: 2em auto;
+  border-radius: 25px;
+  color: #204051;
+}
+
+.book img {
+  border-radius: 10px;
+}
+
+.book p {
+  font-size: 18pt;
+  padding: .5em;
+}
+
+.book a {
+  display: block;
+  text-decoration: none;
+  padding: .5em;
+  width: 50%;
+  margin: 1em auto;
+  background-color: #086972;
+  color: #FBFD8A;
+  border-radius: 10px;
+  
 }
