@@ -19,11 +19,13 @@
           <img class="img" src="<%= book.image_url %>" />
           <h2><%= book.title %></h3>
             <h3><%= book.author %></h3>
+            <h3><%= book.bookshelf %></h3>
             <p><%= book.description %></p>
             <input type="hidden" name="title" value="<%= book.title %>">
             <input type="hidden" name="image_url" value="<%= book.image_url %>">
             <input type="hidden" name="authors" value="<%= book.author %>">
             <input type="hidden" name="description" value="<%= book.description %>">
+            <input type="hidden" name="bookshelf" value="<%= book.bookshelf %>">
             <button>Add to favorites list</button>
         </div>
       </form>

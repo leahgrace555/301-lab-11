@@ -35,6 +35,7 @@ function Book(info) {
   this.author = info.volumeInfo.authors;
   this.description = info.volumeInfo.description;
   this.isbn = info.volumeInfo.industryIdentifiers[0].identifier;
+  this.bookshelf = info.volumeInfo.categories;
 
   let img = info.volumeInfo.imageLinks.thumbnail;
   let reg = /^https/;
@@ -53,8 +54,10 @@ function Book(info) {
 app.get('/books/:book_id', getSingleBook);
 app.get('/searches', getSearch);
 app.get('/', getFavorites);
+app.get('/delete/:book_id', deleteBook);
 app.post('/searches', postSearchResults);
 app.post('/', addBook);
+app.get('/menu', dropDownMenu);
 app.put('/update/:book_id', updateBook);
 
 /////////////////////////////////HELPER FUNCTIONS////////////////////////////////////////////
@@ -68,31 +71,68 @@ const error = (err, res) => {
 // function route404(request, response) {
 //   response.redirect('pages/searches/error.ejs');
 // }
+
 /////////////////////////////////CALLBACK FUNCTIONS////////////////////////////////////////////
 
-// TODO:
+
+function dropDownMenu(request, response) {
+
+  // let sql = 'SELECT DISTINCT bookshelf FROM books;';
+
+  // client.query(sql)
+  //   .then(sqlResults => {
+
+  //     let bookshelf = sqlResults.rows;
+  //     console.log(bookshelf);
+  //     response.render('pages/searches/detail.ejs', {
+  //       test: bookshelf
+  //     });
+
+  //   }).catch(err => error(err, response));
+}
+
+// response.render('pages/searches/show.ejs', {
+//   searchResults: books
+// });
+
+// function for update route
 function updateBook(request, response) {
-  // collect info that needs to be updates
-  // update the DB with the new info
-  // redirect to the detail page with new values
-  console.log('form info to be updated:', request.body);
+
   let id = request.params.book_id;
-  // console.log(id);
 
   let {
     title,
     authors,
-    description
+    description,
+    bookshelf
   } = request.body;
 
-  let sql = 'UPDATE books SET title=$1, authors=$2, description=$3 WHERE id=$4;';
+  let sql = 'UPDATE books SET title=$1, authors=$2, description=$3, bookshelf=$4 WHERE id=$5;';
 
-  let safeVals = [title, authors, description, id];
+  let safeVals = [title, authors, description, bookshelf, id];
 
   client.query(sql, safeVals)
     .then(sqlResults => {
       // redirect to the detail page with new values
       response.redirect(`/books/${id}`);
+    }).catch(err => error(err, response));
+
+}
+
+// function for delete route
+// removes a book from favorites
+function deleteBook(request, response) {
+
+  let id = request.params.book_id;
+
+  let sql = 'DELETE FROM books WHERE id=$1;';
+  let safeVals = [id];
+
+  client.query(sql, safeVals)
+    .then(sqlResults => {
+
+      response.redirect(`/`);
+
     }).catch(err => error(err, response));
 
 }
@@ -106,11 +146,12 @@ function addBook(request, response) {
     authors,
     description,
     image_url,
-    isbn
+    isbn,
+    bookshelf
   } = request.body;
 
-  let sql = 'INSERT INTO books (title, authors, description, image_url, isbn) VALUES ($1, $2, $3, $4, $5) RETURNING ID;';
-  let safeVals = [title, authors, description, image_url, isbn];
+  let sql = 'INSERT INTO books (title, authors, description, image_url, isbn, bookshelf) VALUES ($1, $2, $3, $4, $5, $6) RETURNING ID;';
+  let safeVals = [title, authors, description, image_url, isbn, bookshelf];
 
   // push data into sql
   client.query(sql, safeVals)
@@ -152,6 +193,7 @@ function postSearchResults(request, response) {
   // get api url
   let url = 'https://www.googleapis.com/books/v1/volumes?q='
 
+
   let query = request.body.search[0];
   let titleOrAuthor = request.body.search[1];
 
@@ -164,7 +206,6 @@ function postSearchResults(request, response) {
   // grab data from api
   superagent.get(url)
     .then(results => {
-
       // loop through results and construct new book object each iteration
       let books = results.body.items.map(val => {
         return new Book(val);
@@ -192,7 +233,7 @@ function getSingleBook(request, response) {
 
       // render sql data to detail.ejs
       response.status(200).render('pages/searches/detail.ejs', {
-        oneBook: sqlResults.rows[0]
+        book: sqlResults.rows[0]
       });
     }).catch(err => error(err, response));
 }

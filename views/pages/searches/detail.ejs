@@ -7,26 +7,40 @@
 
 <body>
 
-  <section>
-    <p><%= oneBook.title %></p>
-    <p><%= oneBook.authors %></p>
-    <p><%= oneBook.description %></p>
-    <p><%= oneBook.isbn %></p>
-    <img src="<%= oneBook.image_url %>" alt="<%= oneBook.title %>">
-  </section>
+  <%- include('../../layout/book.ejs') %>
 
-  <form action="/update/<%= oneBook.id %> ?_method=PUT" method="post">
-    <input type="text" name="title" value="<%= oneBook.title %>" placeholder="Book Title">
-    <input type="text" name="author" value="<%= oneBook.authors %>" placeholder="author">
-    <input type="text" name="description" value="<%= oneBook.description %>" placeholder="description">
-    <button>Submit</button>
+  <button id="show">Update Details</button>
+
+  <form action="/delete/<%= book.id %>?_method=DELETE" method="post">
+    <button><a href="/delete/<%= book.id%>">Remove from favorites</a></button>
   </form>
+
+  <div id="details-form">
+    <form action="/update/<%= book.id %> ?_method=PUT" method="post">
+      <%- include('../../layout/form.ejs') %>
+
+
+      <button id="hide">Submit</button>
+    </form>
+  </div>
 
   <footer>
     <a href="/">Go to favorites</a>
     <a href="/searches">Search an author / book</a>
     <a type="button" href="#" onclick="history.back()">Go Back</a>
   </footer>
+
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script>
+    $('#details-form').hide();
+    $('#show').on('click', () => {
+      $('#details-form').show();
+    });
+
+    $('#hide').on('click', () => {
+      $('#details-form').hide();
+    });
+  </script>
 </body>
 
 </html>
