@@ -35,7 +35,7 @@ function Book(info) {
   this.author = info.volumeInfo.authors;
   this.description = info.volumeInfo.description;
   this.isbn = info.volumeInfo.industryIdentifiers[0].identifier;
-  this.bookshelf = info.volumeInfo.categories;
+  this.bookshelf = info.volumeInfo.categories ? info.volumeInfo.categories[0] : 'no bookshelf';
 
   let img = info.volumeInfo.imageLinks.thumbnail;
   let reg = /^https/;
@@ -57,7 +57,6 @@ app.get('/', getFavorites);
 app.get('/delete/:book_id', deleteBook);
 app.post('/searches', postSearchResults);
 app.post('/', addBook);
-app.get('/menu', dropDownMenu);
 app.put('/update/:book_id', updateBook);
 
 /////////////////////////////////HELPER FUNCTIONS////////////////////////////////////////////
@@ -67,33 +66,8 @@ const error = (err, res) => {
   console.log('Error', err);
   res.status(500).send('There was an error on our part.');
 }
-// function for unknown routes
-// function route404(request, response) {
-//   response.redirect('pages/searches/error.ejs');
-// }
 
 /////////////////////////////////CALLBACK FUNCTIONS////////////////////////////////////////////
-
-
-function dropDownMenu(request, response) {
-
-  // let sql = 'SELECT DISTINCT bookshelf FROM books;';
-
-  // client.query(sql)
-  //   .then(sqlResults => {
-
-  //     let bookshelf = sqlResults.rows;
-  //     console.log(bookshelf);
-  //     response.render('pages/searches/detail.ejs', {
-  //       test: bookshelf
-  //     });
-
-  //   }).catch(err => error(err, response));
-}
-
-// response.render('pages/searches/show.ejs', {
-//   searchResults: books
-// });
 
 // function for update route
 function updateBook(request, response) {
@@ -140,7 +114,6 @@ function deleteBook(request, response) {
 // call back function for addbook route
 // adds a book to the favorites list
 function addBook(request, response) {
-
   let {
     title,
     authors,
@@ -248,6 +221,3 @@ client.connect()
   });
 
 // const placeholderImg = 'https://i.imgur.com/J5LVHEL.jpg';
-
-// TODO: fix issue with adding duplicate books to bookshelf
-// TODO: add catch all for unknown routes
