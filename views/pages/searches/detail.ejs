@@ -16,16 +16,7 @@
   </form>
 
   <div id="details-form">
-    <form action="/update/<%= book.id %> ?_method=PUT" method="post">
-      <%- include('../../layout/form.ejs') %>
-
-      <select id="menu" name="bookshelf">
-        <% test.forEach(book => { %>
-        <option><%= book.bookshelf %></option>
-        <% }); %>
-      </select>
-      <button id="hide">Submit</button>
-    </form>
+    <%- include('../../layout/form.ejs') %>
   </div>
 
   <footer>

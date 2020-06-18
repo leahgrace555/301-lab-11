@@ -35,7 +35,7 @@ function Book(info) {
   this.author = info.volumeInfo.authors;
   this.description = info.volumeInfo.description;
   this.isbn = info.volumeInfo.industryIdentifiers[0].identifier;
-  this.bookshelf = info.volumeInfo.categories;
+  this.bookshelf = info.volumeInfo.categories ? info.volumeInfo.categories[0] : 'no bookshelf';
 
   let img = info.volumeInfo.imageLinks.thumbnail;
   let reg = /^https/;
@@ -57,7 +57,6 @@ app.get('/', getFavorites);
 app.get('/delete/:book_id', deleteBook);
 app.post('/searches', postSearchResults);
 app.post('/', addBook);
-app.get('/menu', dropDownMenu);
 app.put('/update/:book_id', updateBook);
 
 /////////////////////////////////HELPER FUNCTIONS////////////////////////////////////////////
@@ -69,23 +68,6 @@ const error = (err, res) => {
 }
 
 /////////////////////////////////CALLBACK FUNCTIONS////////////////////////////////////////////
-
-
-function dropDownMenu(request, response) {
-
-  let sql = 'SELECT DISTINCT bookshelf FROM books;';
-
-  client.query(sql)
-    .then(sqlResults => {
-
-      let bookshelf = sqlResults.rows;
-      console.log(bookshelf);
-      // response.render('pages/searches/detail.ejs', {
-      //   test: bookshelf
-      // });
-
-    }).catch(err => error(err, response));
-}
 
 // function for update route
 function updateBook(request, response) {
@@ -132,7 +114,6 @@ function deleteBook(request, response) {
 // call back function for addbook route
 // adds a book to the favorites list
 function addBook(request, response) {
-
   let {
     title,
     authors,
