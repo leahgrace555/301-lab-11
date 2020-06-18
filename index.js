@@ -57,6 +57,7 @@ app.get('/', getFavorites);
 app.get('/delete/:book_id', deleteBook);
 app.post('/searches', postSearchResults);
 app.post('/', addBook);
+app.get('/menu', dropDownMenu);
 app.put('/update/:book_id', updateBook);
 
 /////////////////////////////////HELPER FUNCTIONS////////////////////////////////////////////
@@ -73,7 +74,28 @@ const error = (err, res) => {
 
 /////////////////////////////////CALLBACK FUNCTIONS////////////////////////////////////////////
 
-// TODO:
+
+function dropDownMenu(request, response) {
+
+  // let sql = 'SELECT DISTINCT bookshelf FROM books;';
+
+  // client.query(sql)
+  //   .then(sqlResults => {
+
+  //     let bookshelf = sqlResults.rows;
+  //     console.log(bookshelf);
+  //     response.render('pages/searches/detail.ejs', {
+  //       test: bookshelf
+  //     });
+
+  //   }).catch(err => error(err, response));
+}
+
+// response.render('pages/searches/show.ejs', {
+//   searchResults: books
+// });
+
+// function for update route
 function updateBook(request, response) {
 
   let id = request.params.book_id;
@@ -94,6 +116,7 @@ function updateBook(request, response) {
       // redirect to the detail page with new values
       response.redirect(`/books/${id}`);
     }).catch(err => error(err, response));
+
 }
 
 // function for delete route
@@ -111,6 +134,7 @@ function deleteBook(request, response) {
       response.redirect(`/`);
 
     }).catch(err => error(err, response));
+
 }
 
 // call back function for addbook route
