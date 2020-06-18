@@ -67,33 +67,25 @@ const error = (err, res) => {
   console.log('Error', err);
   res.status(500).send('There was an error on our part.');
 }
-// function for unknown routes
-// function route404(request, response) {
-//   response.redirect('pages/searches/error.ejs');
-// }
 
 /////////////////////////////////CALLBACK FUNCTIONS////////////////////////////////////////////
 
 
 function dropDownMenu(request, response) {
 
-  // let sql = 'SELECT DISTINCT bookshelf FROM books;';
+  let sql = 'SELECT DISTINCT bookshelf FROM books;';
 
-  // client.query(sql)
-  //   .then(sqlResults => {
+  client.query(sql)
+    .then(sqlResults => {
 
-  //     let bookshelf = sqlResults.rows;
-  //     console.log(bookshelf);
-  //     response.render('pages/searches/detail.ejs', {
-  //       test: bookshelf
-  //     });
+      let bookshelf = sqlResults.rows;
+      console.log(bookshelf);
+      // response.render('pages/searches/detail.ejs', {
+      //   test: bookshelf
+      // });
 
-  //   }).catch(err => error(err, response));
+    }).catch(err => error(err, response));
 }
-
-// response.render('pages/searches/show.ejs', {
-//   searchResults: books
-// });
 
 // function for update route
 function updateBook(request, response) {
